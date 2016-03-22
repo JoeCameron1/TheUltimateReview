@@ -1,0 +1,29 @@
+{% extends 'ultimatereview/base.html' %}
+
+{% load staticfiles %}
+
+{% block title %}My Profile{% endblock %}
+
+{% block body_block %}
+
+<h2>Your Profile</h2>
+
+<form method="POST" action="/ultimatereview/myprofile/" class="" />
+  {% csrf_token %}
+  {% for field in form %}
+  <div class="fieldWrapper">
+      {{ field.errors }}
+      {{ field.label_tag }} {{ field }}
+      {% if field.help_text %}
+      <p class="help">{{ field.help_text|safe }}</p>
+      {% endif %}
+  </div>
+  {% endfor %}
+  <button type="submit">Update Profile</button>
+</form>
+
+<p>Note: To keep password, leave the password field empty.</p>
+
+<h2><a href="{% url 'index' %}">Back to Homepage</a><br /></h2>
+
+{% endblock %}

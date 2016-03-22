@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html>
+{% load staticfiles %}
+    <head>
+        <title>The Ultimate Review</title>
+        <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css">
+        <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap-theme.min.css">
+        <link href="http://fonts.googleapis.com/css?family=Lobster&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+        <link rel="stylesheet" href="{% static 'css/index.css' %}">
+    </head>
+
+    <body>
+
+      <ul>
+        <li><h1><a href="/ultimatereview/">The Ultimate Review</a></h1></li>
+      </ul>
+
+      <div class="centertop">
+
+        <h2>Login to The Ultimate Review</h2>
+
+        <form id="login_form" method="post" action="/ultimatereview/login/">
+            {% csrf_token %}
+            Username: <input type="text" name="username" value="" size="50" />
+            <br />
+            Password: <input type="password" name="password" value="" size="50" />
+            <br />
+
+            <input type="submit" value="submit" />
+        </form>
+
+        <h2><a href="{% url 'index' %}">Back to Homepage</a><br /></h2>
+      </div>
+
+    </body>
+</html>

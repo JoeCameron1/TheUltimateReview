@@ -1,0 +1,91 @@
+<html>
+{% load staticfiles %}
+
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+        <script src="{% static 'js/AbstractPool.js' %}"></script>
+
+    <head>
+        <title>Abstract Pool</title>
+        <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css">
+        <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap-theme.min.css">
+        <link rel="stylesheet" href="{% static 'css/base.css' %}">
+        <link rel="stylesheet" href="{% static 'css/AbstractPool.css' %}">
+
+
+
+    </head>
+
+<body>
+      <div>
+          {% block body_block %}{% endblock %}
+      </div>
+
+      <h2>Abstract Pool</h2>
+      <ul id="documentAbstract"></ul>
+
+      <div  class = 'AbstractSpace'>
+      <h3>Document Abstract </h3>
+      <p id = 'AbstractSpace' name = 'CurrentAbstract'></p>
+      <form method = "POST" name="Relevancy">
+            {% csrf_token %}
+            <button type="submit" value=None name="relevant" action="/ultimatereview/singlereview/{{review.slug}}/AbstractPool">Relevant</button>
+            <button type="submit" value=None name="irrelevant">Not Relevant</button>
+            <input name = "queryField" value = "{{ query }}" style="display:none;" />
+         </form>
+      </div>
+
+
+
+      {% for Abstract in Abstracts %}
+
+        <table style="width:25%"  id = "abstract" class = "SelectionTable">
+          <tr>
+             <td> <h3>Document Title</h3>
+                <p>{{Abstract.title}}</p>
+
+              <h3>Document Author(s)</h3>
+                <p>> {{ Abstract.author }} </p>
+                 <hr>
+                 <button value="{{ Abstract.abstract }}" id = "AbstractButton">Retrieve Abstract</button>
+              </td>
+
+          </tr>
+          </table>
+
+                   {% endfor %}
+
+
+
+      <hr />
+         <div>
+            <ul>
+              {% if user.is_authenticated %}
+              <p>Go to your reviews</p>
+              <a href="{% url 'myreviews' %}">My Reviews</a><br />
+              <p>Update your profile</p>
+              <a href="{% url 'myprofile' %}">My Profile</a><br />
+              <a href="{% url 'logout' %}">Logout</a><br />
+              {% else %}
+              <a href="{% url 'register' %}">Register Here</a><br />
+              <a href="{% url 'login' %}">Login</a><br />
+              {% endif %}
+            </ul>
+      </div>
+
+
+
+      </body>
+
+
+
+
+</html>
+
+
+
+
+
+
+
+
+

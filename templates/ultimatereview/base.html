@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+
+<html>
+{% load staticfiles %}
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+<script src="{% static "js/ultimatereview-js.js" %}"></script>
+    <head>
+        <title>The Ultimate Review</title>
+        <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css">
+        <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap-theme.min.css">
+        <link href="http://fonts.googleapis.com/css?family=Lobster&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+        <link rel="stylesheet" href="{% static 'css/index.css' %}">
+    </head>
+
+    <body>
+
+      <ul>
+        <li><h1><a href="/ultimatereview/">The Ultimate Review</a></h1></li>
+        {% if user.is_authenticated %}
+        <li style="float:right"><h2><a href="/ultimatereview/logout/">Logout</a><br /><h2></li>
+        <li style="float:right"><h2><a href="/ultimatereview/myprofile/">My Profile</a><br /></h2></li>
+        <li style="float:right"><h2><a href="/ultimatereview/myreviews/">My Reviews</a><br /></h2></li>
+        {% else %}
+        <li style="float:right"><h2><a href="/ultimatereview/login/">Login</a><br /></h2></li>
+        <li style="float:right"><h2><a href="/ultimatereview/register/">Register Here</a><br /></h2></li>
+        {% endif %}
+      </ul>
+
+      <div class="content">
+
+        {% block body_block %}{% endblock %}
+
+      </div>
+
+      <hr />
+
+    </body>
+
+</html>

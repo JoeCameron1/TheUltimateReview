@@ -1,0 +1,81 @@
+h1 {
+    color: #FFFFFF;
+    font-family: 'Lobster';
+    background-color: #ff9400;
+    margin-top: 0;
+    padding: 20px 20px 20px 40px;
+}
+
+h1 a {
+  color: #FFFFFF
+}
+
+h2 {
+    color: #FCA205;
+    font-size: 16px;
+}
+
+h2 a {
+    color: #FCA205;
+}
+
+h3 {
+  color: #FFFFFF;
+  font-size: 16px;
+}
+
+h4 a {
+    color: #FCA205;
+}
+
+.content {
+    padding-left: 15px;
+}
+
+.center {
+    position: absolute;
+    left: 0;
+    top: 50%;
+    width: 100%;
+    text-align: center;
+    font-size: 18px;
+}
+
+.centertop {
+    position: absolute;
+    left: 0;
+    top: 15%;
+    width: 100%;
+    text-align: justify;
+    font-size: 18px;
+}
+
+.centerbottom {
+    position: absolute;
+    left: 0;
+    top: 85%;
+    width: 100%;
+    text-align: center;
+    font-size: 18px;
+}
+
+ul {
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+    overflow: hidden;
+    background-color: #FF9400;
+}
+
+li {
+    float: left;
+}
+
+li a {
+    display: block;
+    color: white;
+    text-align: center;
+    padding: 10px 16px;
+    text-decoration: none;
+    margin-bottom: auto;
+}

@@ -1,0 +1,73 @@
+{% extends 'ultimatereview/base.html' %}
+
+{% load staticfiles %}
+
+{% block title %}{{ review_name }}{% endblock %}
+
+
+{% block body_block %}
+
+<html>
+<head>
+	<link rel="stylesheet" href = "{% static 'css/querybuilder.css' %}">
+	<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.mins.js"></script>
+	<script src="{% static "js/querybuilder.js" %}"></script>
+</head>
+<h4>Review Name: {{review.title}}</h4>
+<div id = "inputs">
+	<select id = "fType" name = "fieldType">
+		<option value = "">All</option>
+		<option value = "[author]">Author</option>
+		<option value = "[book]">Book</option>
+	</select>
+	<input name = "queryBox" id = "queryBox"/>
+	<select id = "eType" name = "entryType">
+		<option value = "AND">And</option>
+		<option value = "OR">Or</option>
+		<option value = "NOT">Not</option>
+	</select>
+	<button text = "Enter" id = "addButton">Add</button>
+	
+	<form method="POST" action = "AbstractPool/">
+  		{% csrf_token %}
+  		<textarea cols = "150" rows = "4" id = "queryID" type = "text" name = "queryField"></textarea>
+  		<button type = "submit">Query PubMed</button>
+	</form>
+	<form name = "queries" method="POST" action="/ultimatereview/singlereview/{{ review.slug }}/">
+	{% csrf_token %}
+	<textarea style="display:none;" cols = "150" rows = "4" id = "queryID" type = "text" name = "queryField"></textarea>
+	<input type="submit" value="Save Query" />
+	</form>
+</div>
+
+<div>
+  <table border="3" style="width:100%">
+    <h2><thead>
+      <th>Query Title</th>
+    </thead></h2>
+    <tbody>
+      {% if queries %}
+      {% for query in queries %}
+      <tr>
+        <td><button id = "queryAddButton" value = "{{ query.name }}">{{ query.name }}</button></td>
+		<td>
+		    <form method="POST" action="/ultimatereview/singlereview/{{ review.slug }}/">
+			    {% csrf_token %}
+                <button type="submit" name="delete_query" value={{ query.slug }}>Delete</button>
+            </form>
+		</td>
+      </tr>
+      {% endfor %}
+      {% else %}
+      <tr>
+        <td>You have no queries</td>
+      </tr>
+      {% endif %}
+    </tbody>
+  </table>
+</div>
+
+
+</html>
+
+{% endblock %}

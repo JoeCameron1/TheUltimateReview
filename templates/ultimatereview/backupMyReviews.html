@@ -1,0 +1,47 @@
+{% extends 'ultimatereview/base.html' %}
+
+{% load staticfiles %}
+
+{% block title %}My Profile{% endblock %}
+
+{% block body_block %}
+
+<div>
+  <h2>My Reviews</h2>
+</div>
+<div>
+
+  <form method="POST" action="/ultimatereview/myreviews/">
+      {% csrf_token %}
+      Review Name: <input type="text" name="review" value="" />
+      <br />
+
+      <input type="submit" value="Create Review" />
+  </form>
+
+</div>
+
+<div>
+  <table border="3" style="width:100%">
+    <h2><thead>
+      <th>Review Title</th>
+      <th>Date Started</th>
+    </thead></h2>
+    <tbody>
+      {% if reviews %}
+      {% for review in reviews %}
+      <tr>
+        <td><a href="/ultimatereview/singlereview/{{ review.slug }}"><button>{{ review.title }}</button></a></td>
+        <td>{{ review.date_started }}</td>
+      </tr>
+      {% endfor %}
+      {% else %}
+      <tr>
+        <td>You have no reviews</td>
+      </tr>
+      {% endif %}
+    </tbody>
+  </table>
+</div>
+
+{% endblock %}

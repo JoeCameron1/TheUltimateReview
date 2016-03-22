@@ -1,0 +1,15 @@
+{% extends "ultimatereview/base.html" %}
+
+{% block body_block %}
+
+<h1>Edit Profile</h1>
+
+
+<form method="POST" action="/ultimatereview/myprofile/" class="" />
+    {% csrf_token %}
+    {{ form.as_p }}
+    <button type="submit">Save</button>
+</form>
+
+
+{% endblock %}

@@ -1,0 +1,47 @@
+{% load staticfiles %}
+<html>
+    <head>
+
+        <title>The Ultimate Review</title>
+        <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css">
+        <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap-theme.min.css">
+        <link href="http://fonts.googleapis.com/css?family=Lobster&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+        <link rel="stylesheet" href="{% static 'css/index.css' %}">
+
+    </head>
+
+    <body>
+
+      <ul>
+        <li><h1><a href="/ultimatereview/">The Ultimate Review</a></h1></li>
+        {% if user.is_authenticated %}
+        <li style="float:right"><h2><a href="/ultimatereview/logout/">Logout</a><br /><h2></li>
+        <li style="float:right"><h2><a href="/ultimatereview/myprofile/">My Profile</a><br /></h2></li>
+        <li style="float:right"><h2><a href="/ultimatereview/myreviews/">My Reviews</a><br /></h2></li>
+        {% else %}
+        <li style="float:right"><h2><a href="/ultimatereview/login/">Login</a><br /></h2></li>
+        <li style="float:right"><h2><a href="/ultimatereview/register/">Register Here</a><br /></h2></li>
+        {% endif %}
+      </ul>
+
+      <div class="content">
+
+				<div class="center">
+          {% if user.is_authenticated %}
+          <label>Hello {{ user.username }}, type your query here</label>
+          {% else %}
+          <label>Hello, type your query here</label>
+          {% endif %}
+          <form method="POST" action = "query/">
+  					{% csrf_token %}
+  					<input type = "text" name = "queryField">
+  					<button type = "submit">Query PubMed</button>
+					</form>
+				</div>
+
+        <div class="centerbottom">
+            <h2><a href="">About</a></h2>
+        </div>
+      </div>
+    </body>
+</html>
