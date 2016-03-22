@@ -19,12 +19,22 @@ button {
     text-decoration: none;
 }
 
-button.active {
-    background-color: #4CAF50;
-    color: white;
+.horizontalLine{
+    height: 3px;
+    background-color: #000000;
+    border-bottom:10px solid #ffffff;
+    padding-bottom:2px;
 }
 
-button:hover:not(.active) {
-    background-color: #555;
-    color: white;
+.SelectionTable{
+    border: 1px solid black;
+    border-collapse: collapse;
+    overflow: scroll;
+}
+
+.AbstractSpace{
+    position: fixed;
+    border: 1px solid #000000;
+    width: 75%;
+    right: 0;
 }
