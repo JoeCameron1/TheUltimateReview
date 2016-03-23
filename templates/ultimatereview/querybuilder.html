@@ -26,14 +26,14 @@
 		<option value = "OR">Or</option>
 		<option value = "NOT">Not</option>
 	</select>
-	<button text = "Enter" id = "addButton">Add</button>
+	<button text = "Enter" id = "addButton">Construct</button>
 	{% if alert_message %}
 	{{ alert_message }}
 	{% endif %}
 
 	<form method="POST" action = "AbstractPool/">
   		{% csrf_token %}
-  		<textarea cols = "160" rows = "4" id = "queryID" type = "text" name = "queryField"></textarea>
+  		<textarea cols = "200" rows = "4" id = "queryID" type = "text" name = "queryField"></textarea>
   		<button  class = "margins" type = "submit">Query PubMed</button>
 	</form>
 	<form id = "saveButton" name = "queries" method="POST" action="/ultimatereview/singlereview/{{ review.slug }}/">
