@@ -19,3 +19,12 @@ div {
 textarea{
 	width: 98%;
 }
+
+tr, td
+{
+    border: 1px solid black;
+}
+.header
+{
+    cursor:pointer;
+}

@@ -56,34 +56,53 @@
 </div>
 
 <div>
-  <table border="3" style="width:98%">
-    <h2><thead>
-      <th>Query Title</th>
-	  <th></th>
-    </thead></h2>
-
-    <tbody>
-      {% if queries %}
-      {% for query in queries %}
-      <tr>
-        <td><button id = "queryAddButton" value = "{{ query.name }}">{{ query.name }}</button></td>
-		<td>
+    <table border="3" style="width:98%">
+        <tr  class="header">
+            <td colspan="2">Query Title</td>
+        </tr>
+        {% if queries %}
+        {% for query in queries %}
+        <tr>
+            <td>
+            <button id = "queryAddButton" value = "{{ query.name }}">{{ query.name }}</button></td>
+            <td>
 		    <form method="POST" action="/ultimatereview/singlereview/{{ review.slug }}/">
 			    {% csrf_token %}
                 <button type="submit" name="delete_query" value="{{ query.name }}">Delete</button>
             </form>
 		</td>
-      </tr>
-      {% endfor %}
-      {% else %}
-      <tr>
-        <td>You have no queries</td>
-      </tr>
-      {% endif %}
-    </tbody>
-  </table>
+        </tr>
+        {% endfor %}
+            {% else %}
+            <tr>
+                <td>You have no queries</td>
+            </tr>
+        {% endif %}
 </div>
 
+<div>
+    <table border="3" style="width:98%">
+        <tr  class="header">
+            <td colspan="2">Document Title</td>
+        </tr>
+        {% if pages %}
+        {% for page in finalpages %}
+        <tr>
+            <td>
+            <p>{{ page.title }}<p>
+            <td>
+		    <td>
+            <a href = {{ page.full }}>Full Text</a>
+            </td>
+		</td>
+        </tr>
+        {% endfor %}
+            {% else %}
+            <tr>
+                <td>You have no documents</td>
+            </tr>
+        {% endif %}
+</div>
 
 </html>
 

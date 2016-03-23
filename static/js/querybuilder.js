@@ -29,6 +29,10 @@ $(document).ready( function() {
 	$('form[id="saveButton"]').click(function(){
 		$('textarea[id="queryIDb"]').val($('textarea[id="queryID"]').val());
 	});
+
+	$('.header').click(function(){
+    	$(this).nextUntil('tr.header').slideToggle(1);
+	});
 });
 
 
