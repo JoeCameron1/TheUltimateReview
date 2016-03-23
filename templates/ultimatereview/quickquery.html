@@ -6,13 +6,13 @@
 <head>
     <link rel="stylesheet" href = "{% static 'css/quickquery.css' %}">
 </head>
-<header>Query Results</header>
+<h2>Query Results</h2>
     {% for a in abstracts %}
         <div class = "result">
         <label>{{ a.title }}</label>
         <br>
         <br>
-        <p>Authors: </p>
+        <p><u>Authors: </u></p>
         {% for auth in a.author %}
             <p>{{ auth }}</p>
             {% endfor %}

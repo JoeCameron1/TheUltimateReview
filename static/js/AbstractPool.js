@@ -18,7 +18,8 @@ function loadAbstract() {
 $(document).ready(function() {
     $('button[id="AbstractButton"]').click( function() {
         $(AbstractSpace).html("<p>" + $(this).val() + "</p>");
-        $('button[name="relevant"]').val($(this).val())
+        $('button[name="relevant_button"]').val($(this).val())
+        $('button[name="irrelevant_button"]').val($(this).val())
     });
 });
 
