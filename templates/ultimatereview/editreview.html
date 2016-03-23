@@ -2,7 +2,7 @@
 
 {% block body_block %}
 
-<h1>Edit Review</h1>
+<h2>Edit Review</h2>
 
 <form method="POST" action="/ultimatereview/editreview/{{ slug }}/" class="" />
     {% csrf_token %}
@@ -11,7 +11,7 @@
 	{{ alert_message }}
 	{% endif %}
     <button type="submit">Save</button>
-</form>	
+</form>
 <a href="/ultimatereview/myreviews/"><button>Cancel</button></a>
 
 
