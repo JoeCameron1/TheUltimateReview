@@ -27,7 +27,10 @@
 		<option value = "NOT">Not</option>
 	</select>
 	<button text = "Enter" id = "addButton">Add</button>
-	
+	{% if alert_message %}
+	{{ alert_message }}
+	{% endif %}
+
 	<form method="POST" action = "AbstractPool/">
   		{% csrf_token %}
   		<textarea cols = "160" rows = "4" id = "queryID" type = "text" name = "queryField"></textarea>
