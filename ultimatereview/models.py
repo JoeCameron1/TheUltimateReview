@@ -44,7 +44,7 @@ class Paper(models.Model):
     notes = models.CharField(max_length=30)
 
     def __unicode__(self):  #For Python 2, use __str__ on Python 3
-        return self.name or ''
+        return self.title or ''
 
 class UserProfile(models.Model):
     # This line is required. Links UserProfile to a User model instance.
