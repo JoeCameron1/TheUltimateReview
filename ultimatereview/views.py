@@ -152,14 +152,26 @@ def single_review(request, review_name_slug):
     return render(request, 'ultimatereview/querybuilder.html', context)
 
 @login_required
+def relevant_doc(request):
+    docID = None
+    if request.method == "GET":
+        docID = request.GET['test']
+    return(HttpResponse)
+
+@login_required
 def AbstractPool(request, review_name_slug):
-      papers = Paper.objects.filter().all()
-      review = Review.objects.get(slug=review_name_slug)
-      if request.method == "POST":
-        q = request.POST.get('queryField')
-        s = request.POST.get('sortType')
-        n = request.POST.get('noResults')
-        abstractList = search.main(q,s, n)
+    papers = Paper.objects.filter().all()
+    review = Review.objects.get(slug=review_name_slug)
+    if request.method == "POST":
+        if request.POST.get('results') == None:
+            q = request.POST.get('queryField')
+            s = request.POST.get('sortType')
+            n = request.POST.get('noResults')
+            abstractList = search.main(q,s, n)
+        else:
+            print "traceB"
+            abstractList = eval(request.POST.get('results'))
+            q = request.POST.get('queryField')
         relevant=None
         if request.POST.get("relevant_button", None)!=None:
             relevant="True"
