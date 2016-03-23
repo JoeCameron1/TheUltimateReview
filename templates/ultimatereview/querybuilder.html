@@ -30,21 +30,23 @@
 	
 	<form method="POST" action = "AbstractPool/">
   		{% csrf_token %}
-  		<textarea cols = "150" rows = "4" id = "queryID" type = "text" name = "queryField"></textarea>
+  		<textarea cols = "184" rows = "4" id = "queryID" type = "text" name = "queryField"></textarea>
   		<button type = "submit">Query PubMed</button>
 	</form>
-	<form name = "queries" method="POST" action="/ultimatereview/singlereview/{{ review.slug }}/">
+	<form id = "saveButton" name = "queries" method="POST" action="/ultimatereview/singlereview/{{ review.slug }}/">
 	{% csrf_token %}
-	<textarea style="display:none;" cols = "150" rows = "4" id = "queryID" type = "text" name = "queryField"></textarea>
+	<textarea style="display:none;" cols = "200" rows = "4" id = "queryIDb" type = "text" name = "queryField"></textarea>
 	<input type="submit" value="Save Query" />
 	</form>
 </div>
 
 <div>
-  <table border="3" style="width:100%">
+  <table border="3" style="width:98%">
     <h2><thead>
       <th>Query Title</th>
+	  <th></th>
     </thead></h2>
+
     <tbody>
       {% if queries %}
       {% for query in queries %}
@@ -53,7 +55,7 @@
 		<td>
 		    <form method="POST" action="/ultimatereview/singlereview/{{ review.slug }}/">
 			    {% csrf_token %}
-                <button type="submit" name="delete_query" value={{ query.slug }}>Delete</button>
+                <button type="submit" name="delete_query" value="{{ query.name }}">Delete</button>
             </form>
 		</td>
       </tr>
