@@ -31,7 +31,7 @@ class Query(models.Model):
     name = models.CharField(max_length=600,null = True)
 
     def __unicode__(self):  #For Python 2, use __str__ on Python 3
-        return self.name
+        return self.name or ''
 
 class Paper(models.Model):
     review = models.ForeignKey(Review)
@@ -45,7 +45,7 @@ class Paper(models.Model):
     notes = models.CharField(max_length=30)
 
     def __unicode__(self):  #For Python 2, use __str__ on Python 3
-        return self.name
+        return self.name or ''
 
 class UserProfile(models.Model):
     # This line is required. Links UserProfile to a User model instance.
