@@ -30,6 +30,7 @@
        </form>
   </div>
 
+
 	<div>
 
     {% for Abstract in Abstracts %}
@@ -39,7 +40,12 @@
               <p>{{Abstract.title}}</p>
 
             <h2>Document Author(s)</h2>
-              <p>> {{ Abstract.author }} </p>
+						<p>
+							{% for author in Abstract.author %}
+							{{ author }}
+							<br />
+							{% endfor %}
+						</p>
                <hr>
                <button value="{{ Abstract.abstract }}" id = "AbstractButton">Retrieve Abstract</button>
           </td>

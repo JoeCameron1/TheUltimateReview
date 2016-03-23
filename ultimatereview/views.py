@@ -88,7 +88,7 @@ def myreviews(request):
 					review.save()
 					reviews = Review.objects.filter(user=request.user).order_by('-date_started')
 					context['reviews']=reviews
-					context['alert_message']="A review was created with name:"+new_title
+					context['alert_message']="A review was created with name: "+new_title
 				else:
 					context['alert_message']="A review with this name already exists."
 			else:
@@ -132,7 +132,7 @@ def single_review(request, review_name_slug):
         queries = Query.objects.filter(review=review)
         context['queries'] = queries
         context['review'] = review
-        if request.method == "POST":      
+        if request.method == "POST":
             if request.POST.get('delete_query', "") != "":
                 query_to_delete = Query.objects.get(name=request.POST.get('delete_query'))
                 if query_to_delete != None:
