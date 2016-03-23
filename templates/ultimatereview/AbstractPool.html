@@ -47,6 +47,7 @@
                     <input name = "hiddenCompareCount" value = "{{ Abstract.compareCount }}" style="display:none;" />
               </form>
               <form method = "POST" >
+								{% csrf_token %}
                 <button type="submit" value="Test-irrelevant" name="irrelevant_button">Not Relevant</button>
                 <input name = "queryField" value = "{{ query }}" style="display:none;" />
                 <input name = "hiddenCompareCount" value = "{{ Abstract.compareCount }}" style="display:none;" />
