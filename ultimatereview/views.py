@@ -14,6 +14,9 @@ import json
 def index(request):
     return render(request, 'ultimatereview/index.html',{})
 
+def about(request):
+    return render(request, 'ultimatereview/about.html',{})
+
 @login_required
 def myprofile(request):
     user = request.user
@@ -24,7 +27,7 @@ def myprofile(request):
             user.email = request.POST['email']
             if request.POST['password'] != "":
                 user.set_password(request.POST['password'])
-            user.save() 
+            user.save()
     form = UserForm(initial={'username':user.username, 'email':user.email, 'password':user.password})
     context = {
         "form": form
@@ -129,21 +132,21 @@ def single_review(request, review_name_slug):
         queries = Query.objects.filter(review=review)
         context['queries'] = queries
         context['review'] = review
-        if request.method == "POST":
-            if not queries.filter(name = request.POST.get('queryField')).exists():
-                query = Query(review=review, name=request.POST.get('queryField'))
+        if request.method == "POST":      
+            if request.POST.get('delete_query', "") != "":
+                query_to_delete = Query.objects.get(name=request.POST.get('delete_query'))
+                if query_to_delete != None:
+                    query_to_delete.delete()
+                    context['alert_message'] = "Query deleted: " + query_to_delete.name
+            elif not queries.filter(name = request.POST.get('queryField')).exists():
+                query = Query.objects.create(review=review, name=request.POST.get('queryField'))
                 if query != None:
                     query.save()
                 review = Review.objects.get(slug=review_name_slug)
                 queries = Query.objects.filter(review=review)
                 context['queries'] = queries
                 context['review'] = review
-                context['alert_message']="Query saved: "+request.POST.get('queryField')
-            elif request.POST.get('delete_query', "")!="":
-                query_to_delete=Query.objects.get(name=request.POST.get('delete_query'))
-                if query_to_delete!=None:
-                    query_to_delete.delete()
-                    context['alert_message'] = "Query deleted: "+query_to_delete.name
+                context['alert_message'] = "Query saved: " + request.POST.get('queryField')
     except Review.DoesNotExist:
         pass
     return render(request, 'ultimatereview/querybuilder.html', context)
