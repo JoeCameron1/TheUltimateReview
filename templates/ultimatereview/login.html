@@ -28,6 +28,9 @@
 
             <input type="submit" value="submit" />
         </form>
+          {% if alert_message %}
+		{{ alert_message }}
+		{% endif %}
 
         <h2><a href="{% url 'index' %}">Back to Homepage</a><br /></h2>
       </div>
