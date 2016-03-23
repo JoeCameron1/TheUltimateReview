@@ -10,9 +10,9 @@ $(document).ready( function() {
 		var eType = $('select[name=entryType]').val();
 		if (no == 1) {
 			if ($('textarea').val() == ""){
-					curQue = (eType + $('textarea').val() + toAdd + type);
+					curQue = ($('textarea').val() + toAdd + type);
 				}
-			else 
+			else
 				{
 				curQue = ("(" + $('textarea').val() + ") " + eType + " " + toAdd + type)
 				}
