@@ -13,15 +13,15 @@
 	<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.mins.js"></script>
 	<script src="{% static "js/querybuilder.js" %}"></script>
 </head>
-<h4>Review Name: {{review.title}}</h4>
+<h4 class = "margins">Review Name: {{review.title}}</h4>
 <div id = "inputs">
-	<select id = "fType" name = "fieldType">
+	<select  class = "margins" id = "fType" name = "fieldType">
 		<option value = "">All</option>
 		<option value = "[author]">Author</option>
 		<option value = "[book]">Book</option>
 	</select>
-	<input name = "queryBox" id = "queryBox"/>
-	<select id = "eType" name = "entryType">
+	<input  class = "margins" name = "queryBox" id = "queryBox"/>
+	<select  class = "margins" id = "eType" name = "entryType">
 		<option value = "AND">And</option>
 		<option value = "OR">Or</option>
 		<option value = "NOT">Not</option>
@@ -30,13 +30,13 @@
 	
 	<form method="POST" action = "AbstractPool/">
   		{% csrf_token %}
-  		<textarea cols = "184" rows = "4" id = "queryID" type = "text" name = "queryField"></textarea>
-  		<button type = "submit">Query PubMed</button>
+  		<textarea cols = "160" rows = "4" id = "queryID" type = "text" name = "queryField"></textarea>
+  		<button  class = "margins" type = "submit">Query PubMed</button>
 	</form>
 	<form id = "saveButton" name = "queries" method="POST" action="/ultimatereview/singlereview/{{ review.slug }}/">
 	{% csrf_token %}
 	<textarea style="display:none;" cols = "200" rows = "4" id = "queryIDb" type = "text" name = "queryField"></textarea>
-	<input type="submit" value="Save Query" />
+	<input  class = "margins" type="submit" value="Save Query" />
 	</form>
 </div>
 
