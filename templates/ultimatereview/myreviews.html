@@ -29,7 +29,7 @@
     <h2><thead>
       <th width = "65%">Review Title</th>
       <th width = "20%">Date Started</th>
-	  <th width = "15%">Options</th>
+	  <th colspan="2" width = "15%">Options</th>
     </thead></h2>
     <tbody>
       {% if reviews %}
@@ -42,8 +42,8 @@
 			    {% csrf_token %}
                 <button type="submit" name="delete_review" value={{ review.slug }}>Delete</button>
             </form>
-			<a href="/ultimatereview/editreview/{{ review.slug }}"><button>Edit</button></a>
-		</td>
+    </td>
+			<td> <a href="/ultimatereview/editreview/{{ review.slug }}"><button>Edit</button></a></td>
       </tr>
       {% endfor %}
       {% else %}
