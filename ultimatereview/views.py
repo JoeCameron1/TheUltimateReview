@@ -187,6 +187,27 @@ def AbstractPool(request, review_name_slug):
                         paper.save()
 
         return render(request, 'ultimatereview/AbstractPool.html', {"Abstracts": abstractList, 'query': q})
+		
+@login_required
+def document_pool(request, review_name_slug):
+	current_review = Review.objects.get(slug=review_name_slug)
+	context={'alert_message':None}
+	if request.method == 'POST':
+		if request.POST.get('relevant', "") != "":
+			paper=Paper.objects.filter(paper_url=request.POST.get('relevant')).first()
+			if paper!=None:
+				paper.document_relevance="True"
+				paper.save()
+				context['alert_message']="Paper "+paper.title+" was marked as relevant."
+		elif request.POST.get('not_relevant', default="")!="":
+			paper=Paper.objects.filter(paper_url=request.POST.get('not_relevant', "")).first()
+			if paper!=None:
+				paper.delete()
+				context['alert_message']="Paper "+paper.title+" was marked as not relevant."
+	documents = Paper.objects.filter(review=current_review, document_relevance="False")
+	context={'documents':documents, 'review_slug':review_name_slug}
+	return render(request, 'ultimatereview/document_pool.html', context)
+	
     
 @login_required
 def user_logout(request):

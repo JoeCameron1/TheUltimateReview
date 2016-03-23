@@ -39,10 +39,11 @@ class Paper(models.Model):
     authors = models.CharField(max_length=30)
     abstract = models.CharField(max_length=300)
     paper_url = models.URLField()
+    full_text = models.URLField(null=True)
     abstract_relevance = models.CharField(max_length=30)
     document_relevance = models.CharField(max_length=30)
     notes = models.CharField(max_length=30)
-
+    
     def __unicode__(self):  #For Python 2, use __str__ on Python 3
         return self.title or ''
 

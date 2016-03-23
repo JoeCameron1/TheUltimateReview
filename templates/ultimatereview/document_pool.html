@@ -1,0 +1,58 @@
+{% extends 'ultimatereview/base.html' %}
+
+{% load staticfiles %}
+
+{% block title %}My Profile{% endblock %}
+
+{% block body_block %}
+
+<div>
+    <h2>My Reviews</h2>
+</div>
+<div>
+    {% if alert_message %}
+    {{ alert_message }}
+    {% endif %}
+</div>
+
+<div>
+    <table border="3" style="width:100%">
+    <h2><thead>
+        <th width = "70%">Document Title</th>
+        <th width = "15%">Full Text</th>
+	    <th colspan="2" width = "15%">Rate</th>
+    </thead></h2>
+    <tbody>
+        {% if documents %}
+        {% for document in documents %}
+        <tr>
+            <td>{{ document.title }}</td>
+            <td>
+			{% if document.full_text %}
+			<a target="_blank" href="{{ document.full_text }}" ><button>Link</button></a>
+			{% else %}
+			Not available
+			{% endif %}
+			</td>
+		    <td><form method="POST" action="/ultimatereview/singlereview/{{ review_slug }}/DocumentPool/">
+			    {% csrf_token %}
+                <button type="submit" name="relevant" value="{{ document.paper_url }}">Relevant</button>
+            </form></td>
+			<td><form method="POST" action="/ultimatereview/singlereview/{{ review_slug }}/DocumentPool/">
+			    {% csrf_token %}
+                <button type="submit" name="not_relevant" value="{{ document.paper_url }}">Not Relevant</button>
+            </form></td>
+            <a href="/ultimatereview/editreview/{{ review.slug }}"><button>Edit</button></a>
+            </td>
+        </tr>
+        {% endfor %}
+        {% else %}
+        <tr>
+            <td width = "100%">You have no documents in the Document Pool</td>
+        </tr>
+        {% endif %}
+    </tbody>
+    </table>
+</div>
+
+{% endblock %}
