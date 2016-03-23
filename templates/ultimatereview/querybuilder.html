@@ -32,14 +32,24 @@
 	{% endif %}
 
 	<form method="POST" action = "AbstractPool/">
+        <div class = "margins">
   		{% csrf_token %}
   		<textarea cols = "200" rows = "4" id = "queryID" type = "text" name = "queryField"></textarea>
   		<button  class = "margins" type = "submit">Query PubMed</button>
+        <input name = "noResults" type = "number" min = "1" max = "20" value = "10">
+            <select name = "sortType" value = "Sort Type">
+            <option value = "relevance">Relevance</option>
+            <option value = "recent">Most Recent</option>
+            <option value = "title">Title</option>
+        </select>
+        </div>
 	</form>
 	<form id = "saveButton" name = "queries" method="POST" action="/ultimatereview/singlereview/{{ review.slug }}/">
 	{% csrf_token %}
-	<textarea style="display:none;" cols = "200" rows = "4" id = "queryIDb" type = "text" name = "queryField"></textarea>
-	<input  class = "margins" type="submit" value="Save Query" />
+        <div class = "margins">
+	    <textarea style="display:none;" cols = "200" rows = "4" id = "queryIDb" type = "text" name = "queryField"></textarea>
+	    <input  class = "margins" type="submit" value="Save Query" />
+            </div>
 	</form>
 </div>
 

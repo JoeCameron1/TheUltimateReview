@@ -68,7 +68,7 @@ def main(query,sort,number):
         def compactAbstract(abstract):
                 startIndex = 0
                 endIndex = abstract.find("\n\n")
-                while endIndex-startIndex < 750 and abstract.find("\n\n",startIndex+2) > 0:
+                while endIndex-startIndex < 750 and abstract.find("\n\n",startIndex+2)> 0 or abstract[startIndex+2:startIndex+21] == "Author information:":
                         startIndex = abstract.find("\n\n",startIndex+4)
                         endIndex = abstract.find("\n\n",endIndex+4)
                 if abstract.find("\n\n",startIndex+2) == -1:

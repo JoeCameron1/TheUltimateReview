@@ -2,12 +2,18 @@ body {
     margin: 0;
 }
 
+.result {
+    border-radius: 25px;
+    border: 2px solid #ff9400;
+    padding: 20px;
+    width: 98%;
+}
+
 table {
     list-style-type: none;
     margin: 0;
     padding: 0;
     width: 25%;
-    background-color: #f1f1f1;
     height: 100%;
     overflow: auto;
 }
@@ -33,8 +39,11 @@ button {
 }
 
 .AbstractSpace{
+    border-radius: 25px;
+    border: 2px solid #ff9400;
+    padding: 20px;
     position: fixed;
-    border: 1px solid #000000;
-    width: 75%;
-    right: 0;
+    width: 70%;
+    right: 5%;
+    left: 25%
 }

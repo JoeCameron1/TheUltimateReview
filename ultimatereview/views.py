@@ -157,7 +157,9 @@ def AbstractPool(request, review_name_slug):
       review = Review.objects.get(slug=review_name_slug)
       if request.method == "POST":
         q = request.POST.get('queryField')
-        abstractList = search.main(q,"relevance", "10")
+        s = request.POST.get('sortType')
+        n = request.POST.get('noResults')
+        abstractList = search.main(q,s, n)
         relevant=None
         if request.POST.get("relevant_button", None)!=None:
             relevant="True"
