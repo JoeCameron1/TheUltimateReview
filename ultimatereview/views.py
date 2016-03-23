@@ -77,13 +77,16 @@ def myreviews(request):
 	reviews = Review.objects.filter(user=request.user).order_by('-date_started')
 	context = {'reviews':reviews, 'alert_message':None}
 	if request.method == "POST":
-		if not request.POST.get('review', "")=="":
-			if not any(c in '!@#$%^&*\"\'' for c in request.POST.get('review', "")):
-				if not reviews.filter(slug=slugify(request.POST.get('review', ""))).exists():
-					review = Review.objects.create(user=request.user, title=request.POST.get('review', ""), date_started=datetime.datetime.now())
+		new_title=request.POST.get('review', "")
+		new_title = new_title.strip()
+		if new_title!="":
+			if not any(c in '!@#$%^&*\"\'' for c in new_title):
+				if not reviews.filter(slug=slugify(new_title)).exists():
+					review = Review(user=request.user, title=new_title, date_started=datetime.datetime.now())
 					review.save()
 					reviews = Review.objects.filter(user=request.user).order_by('-date_started')
 					context['reviews']=reviews
+					context['alert_message']="A review was created with name:"+new_title
 				else:
 					context['alert_message']="A review with this name already exists."
 			else:
@@ -130,7 +133,8 @@ def single_review(request, review_name_slug):
         if request.method == "POST":
             if not queries.filter(name = request.POST.get('queryField')).exists():
                 query = Query(review=review, name=request.POST.get('queryField'))
-                query.save()
+                if query != None:
+                    query.save()
                 review = Review.objects.get(slug=review_name_slug)
                 queries = Query.objects.filter(review=review)
                 context['queries'] = queries
@@ -170,14 +174,4 @@ def indexQueried(request):
     if request.method == "POST":
         query = request.POST["queryField"]
         abstractList = search.main(query,"relevance","5")
-        output = ""
-        for i in abstractList:
-            output += "Title: " + str(i['title'])
-            output += "\n"
-            output += "Author: " + str(i['author'])
-            output += "\n"
-            output += "URL: " + str(i['url'])
-            output += "\n"
-            output += str(['abstract'])
-            output += "\n\n"
-        return HttpResponse(output)
+        return render(request, 'ultimatereview/quickquery.html', {"abstracts": abstractList})
