@@ -1,0 +1,33 @@
+{% extends "ultimatereview/base.html" %}
+
+{% load staticfiles %}
+
+{% block body_block %}
+<head>
+    <link rel="stylesheet" href = "{% static 'css/quickquery.css' %}">
+</head>
+<header>Query Results</header>
+    {% for a in abstracts %}
+        <div class = "result">
+        <label>{{ a.title }}</label>
+        <br>
+        <br>
+        <p>Authors: </p>
+        {% for auth in a.author %}
+            <p>{{ auth }}</p>
+            {% endfor %}
+        <br>
+        <p>{{ a.abstract }}</p>
+        <br><br>
+        {% if a.fullText != "No Full Text Available" %}
+        <a href = {{ a.fullText }}>Full Text</a>
+            {% else %}
+            <p class = "nofull"><strong>No Full Text Available</strong></p>
+        {% endif %}
+        </div>
+        <br><br>
+    {% endfor %}
+
+
+
+{% endblock %}

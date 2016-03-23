@@ -67,6 +67,17 @@ def main(query,sort,number):
 
         def compactAbstract(abstract):
                 startIndex = 0
+                endIndex = abstract.find("\n\n")
+                while endIndex-startIndex < 750 and abstract.find("\n\n",startIndex+2) > 0:
+                        startIndex = abstract.find("\n\n",startIndex+4)
+                        endIndex = abstract.find("\n\n",endIndex+4)
+                if abstract.find("\n\n",startIndex+2) == -1:
+                        return abstract
+                else:
+                        return abstract[startIndex+2:endIndex]
+
+        def compactAbstractb(abstract):
+                startIndex = 0
                 for i in range (0,4):
                         startIndex = abstract.find("\n\n",startIndex+4)
                 endIndex = abstract.find("\n\n",startIndex+4)
@@ -104,6 +115,7 @@ def main(query,sort,number):
         page = urllib.urlopen(url + searchURL(convertQuery(query),sort,number))     #opens page for given query and sets it to 'page' variable
         source = page.read()
         idList = removeBrackets(fetchExtract(source,"IdList")).split()#Removes brackets for the string containing the ID list, and splits into a list of each ID
+        count  = fetchExtract(source,"Count")
         if fetchExtract(source,"IdList") == "NOTHING":
                 return [{'url':"N/A",'abstract': "N/A", 'id': "N/A", 'fullText': "N/A",
                         'author': "N/A", 'title': "N/A"}]
@@ -114,7 +126,7 @@ def main(query,sort,number):
                 p = urllib.urlopen(url + currentURL)
                 source = p.read()
                 document = {'url': puburl + u, 'abstract': compactAbstract(source),
-                            'id':u, 'fullText':findFullText(puburl + u)}
+                            'id':u, 'fullText':findFullText(puburl + u),'count':count}
                 p.close
                 p = urllib.urlopen(url + summaryURL(u))
                 source = p.read()
