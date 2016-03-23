@@ -165,7 +165,7 @@ def AbstractPool(request, review_name_slug):
             if request.POST.get("irrelevant_button" ,None)!=None:
                 relevant="False"
         if relevant!=None:
-            compareCount_value=int(request.POST.get("hiddenCompareCount"))
+            compareCount_value = int(request.POST.get("hiddenCompareCount"))
             for s in abstractList:
                 if s.get('compareCount') == compareCount_value:
                         currentDoc = s

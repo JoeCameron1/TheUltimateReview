@@ -38,7 +38,6 @@ class Paper(models.Model):
     title = models.CharField(max_length=30)
     authors = models.CharField(max_length=30)
     abstract = models.CharField(max_length=300)
-    publish_date = models.DateField()
     paper_url = models.URLField()
     abstract_relevance = models.CharField(max_length=30)
     document_relevance = models.CharField(max_length=30)

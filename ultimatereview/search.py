@@ -120,7 +120,7 @@ def main(query,sort,number):
                 return [{'url':"N/A",'abstract': "N/A", 'id': "N/A", 'fullText': "N/A",
                         'author': "N/A", 'title': "N/A"}]
         docList = []
-        compareCount = 0
+        compareCount = 1
         for u in idList:                #generates a new list containing each ID's respective url
                 document = {}
                 currentURL = fetchURL(u)
