@@ -4,6 +4,7 @@ h1 {
     background-color: #ff9400;
     margin-top: 0;
     padding: 20px 20px 20px 40px;
+    position: fixed;
 }
 
 h1 a {

@@ -9,12 +9,21 @@ body {
     width: 98%;
 }
 
+.centre{
+    text-align: center;
+}
+
 table {
     list-style-type: none;
     margin: 0;
     padding: 0;
     width: 25%;
     height: 100%;
+}
+
+
+tr {
+    display: block;
     overflow: auto;
 }
 
@@ -45,5 +54,5 @@ button {
     position: fixed;
     width: 70%;
     right: 5%;
-    left: 25%
+    left: 25%;
 }

@@ -6,6 +6,13 @@ h1 {
     padding: 20px 20px 20px 40px;
 }
 
+.result {
+    border-radius: 25px;
+    border: 2px solid #ff9400;
+    padding: 20px;
+    width: 98%;
+}
+
 h1 a {
   color: #FFFFFF
 }

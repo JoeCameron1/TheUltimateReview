@@ -28,11 +28,11 @@
         <table style="width:20%"  id = "abstract" class = "SelectionTable">
           <tr>
              <td>
-               <h2>Document Title</h2>
+               <h2 class = "centre">Document Title</h2>
                <p>{{Abstract.title}}</p>
 
-               <h2>Document Author(s)</h2>
-               <p>
+               <h2 class = "centre"><strong>Document Author(s)<strong/></strong></h2>
+               <p class = "centre">
                  {% for author in Abstract.author %}
                  {{ author }}
                  <br />
@@ -45,12 +45,14 @@
                  <button type="submit" value="Test" name="relevant_button" >Relevant</button>
                     <input name = "queryField" value = "{{ query }}" style="display:none;" />
                     <input name = "hiddenCompareCount" value = "{{ Abstract.compareCount }}" style="display:none;" />
+                   <input name = "results" value = "{{ Abstracts }}" style= "display:none;" />
               </form>
               <form method = "POST" >
 								{% csrf_token %}
                 <button type="submit" value="Test-irrelevant" name="irrelevant_button">Not Relevant</button>
                 <input name = "queryField" value = "{{ query }}" style="display:none;" />
-                <input name = "hiddenCompareCount" value = "{{ Abstract.compareCount }}" style="display:none;" />
+
+
               </form>
             </td>
           </tr>
