@@ -1,68 +1,98 @@
-{% extends 'ultimatereview/base.html' %}
-
+<html>
 {% load staticfiles %}
 
-{% block title %}{{ review_name }}{% endblock %}
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+        <script src="{% static 'js/AbstractPool.js' %}"></script>
 
-
-{% block body_block %}
-
-<html>
-<head>
-	<link rel="stylesheet" href = "{% static 'css/abstract_pool.css' %}">
-	<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.mins.js"></script>
-	<script src="{% static "js/AbstractPool.js" %}"></script>
-</head>
-
-<div class="content">
-
-  <h2>Abstract Pool</h2>
-  <ul id="documentAbstract"></ul>
-
-  <div class = 'AbstractSpace'>
-    <h2>Document Abstract </h2>
-    <p id = 'AbstractSpace' name = 'CurrentAbstract'></p>
-  </div>
-
-
-	<div>
-
-    {% for Abstract in Abstracts %}
-      <table style="width:20%"  id = "abstract" class = "SelectionTable">
-        <tr>
-           <td> <h2>Document Title</h2>
-              <p>{{Abstract.title}}</p>
-
-            <h2>Document Author(s)</h2>
-						<p>
-							{% for author in Abstract.author %}
-							{{ author }}
-							<br />
-							{% endfor %}
-						</p>
-               <hr>
-               <button value="{{ Abstract.abstract }}" id = "AbstractButton">Retrieve Abstract</button>
-
-							 <form method = "POST" name="Relevancy">
-					           {% csrf_token %}
-					           <button type="submit" value=None name="relevant_button" action="/ultimatereview/singlereview/{{review.slug}}/AbstractPool">Relevant</button>
-					           <button type="submit" value=None name="irrelevant_button">Not Relevant</button>
-					           <input name = "queryField" value = "{{ query }}" style="display:none;" />
-					     </form>
-
-          </td>
-
-      	</tr>
-      </table>
-    {% endfor %}
-
-	</div>
+    <head>
+        <title>Abstract Pool</title>
+        <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css">
+        <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap-theme.min.css">
+        <link rel="stylesheet" href="{% static 'css/base.css' %}">
+        <link rel="stylesheet" href="{% static 'css/AbstractPool.css' %}">
 
 
 
-  <hr />
+    </head>
 
-</div>
+<body>
+      <div>
+          {% block body_block %}{% endblock %}
+      </div>
+
+      <h2>Abstract Pool</h2>
+      <ul id="documentAbstract"></ul>
+
+      <div  class = 'AbstractSpace'>
+      <h3>Document Abstract </h3>
+      <p id = 'AbstractSpace' name = 'CurrentAbstract'></p>
+
+
+      </div>
+
+
+
+      {% for Abstract in Abstracts %}
+
+        <table style="width:25%"  id = "abstract" class = "SelectionTable">
+          <tr>
+             <td> <h3>Document Title</h3>
+                <p>{{Abstract.title}}</p>
+
+              <h3>Document Author(s)</h3>
+                <p>> {{ Abstract.author }} </p>
+                 <hr>
+                 <button value="{{ Abstract.abstract }}" id = "AbstractButton">Retrieve Abstract</button>
+                       <form method = "POST" accept-charset="US-ASCII">
+            {% csrf_token %}
+            <button type="submit" value="Test" name="relevant_button" >Relevant</button>
+                           <input name = "queryField" value = "{{ query }}" style="display:none;" />
+                           <input name = "hiddenCompareCount" value = "{{ Abstract.compareCount }}" style="display:none;" />
+      </form>
+      <form method = "POST" >
+            <button type="submit" value="Test-irrelevant" name="irrelevant_button">Not Relevant</button>
+            <input name = "queryField" value = "{{ query }}" style="display:none;" />
+          <input name = "hiddenCompareCount" value = "{{ Abstract.compareCount }}" style="display:none;" />
+         </form>
+              </td>
+
+          </tr>
+          </table>
+
+                   {% endfor %}
+
+
+
+      <hr />
+         <div>
+            <ul>
+              {% if user.is_authenticated %}
+              <p>Go to your reviews</p>
+              <a href="{% url 'myreviews' %}">My Reviews</a><br />
+              <p>Update your profile</p>
+              <a href="{% url 'myprofile' %}">My Profile</a><br />
+              <a href="{% url 'logout' %}">Logout</a><br />
+              {% else %}
+              <a href="{% url 'register' %}">Register Here</a><br />
+              <a href="{% url 'login' %}">Login</a><br />
+              {% endif %}
+            </ul>
+      </div>
+
+
+
+      </body>
+
+
+
+
 </html>
 
-{% endblock %}
+
+
+
+
+
+
+
+
