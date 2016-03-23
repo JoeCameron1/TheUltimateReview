@@ -94,7 +94,7 @@ def myreviews(request):
 			else:
 				context['alert_message']="Title cannot contain !@#$%^&*\"\'"
 		elif request.POST.get('delete_review', "")!="":
-			review_to_delete=Review.objects.get(slug=request.POST.get('delete_review'))
+			review_to_delete=reviews.get(slug=request.POST.get('delete_review'))
 			if review_to_delete!=None:
 				review_to_delete.delete()
 				context['alert_message'] = "Review deleted: "+review_to_delete.title
@@ -104,7 +104,7 @@ def myreviews(request):
 
 @login_required
 def edit_review(request, review_name_slug):
-	review=Review.objects.get(slug=review_name_slug)
+	review=Review.objects.get(user=request.user, slug=review_name_slug)
 	context={'title':review.title, 'slug':review.slug, 'alert_message':None}
 	if request.method == 'POST':
 		if review!=None:
@@ -127,7 +127,7 @@ def edit_review(request, review_name_slug):
 def single_review(request, review_name_slug):
     context = {}
     try:
-        review = Review.objects.get(slug=review_name_slug)
+        review = Review.objects.get(user=request.user, slug=review_name_slug)
         context['review_title'] = review.title
         queries = Query.objects.filter(review=review)
         context['queries'] = queries
@@ -142,7 +142,7 @@ def single_review(request, review_name_slug):
                 query = Query.objects.create(review=review, name=request.POST.get('queryField'))
                 if query != None:
                     query.save()
-                review = Review.objects.get(slug=review_name_slug)
+                review = Review.objects.get(user=request.user, slug=review_name_slug)
                 queries = Query.objects.filter(review=review)
                 context['queries'] = queries
                 context['review'] = review
@@ -160,8 +160,7 @@ def relevant_doc(request):
 
 @login_required
 def AbstractPool(request, review_name_slug):
-    papers = Paper.objects.filter().all()
-    review = Review.objects.get(slug=review_name_slug)
+    review = Review.objects.get(user=request.user, slug=review_name_slug)
     if request.method == "POST":
         if request.POST.get('results') == None:
             q = request.POST.get('queryField')
@@ -187,28 +186,28 @@ def AbstractPool(request, review_name_slug):
                         paper.save()
 
         return render(request, 'ultimatereview/AbstractPool.html', {"Abstracts": abstractList, 'query': q})
-		
+
 @login_required
 def document_pool(request, review_name_slug):
-	current_review = Review.objects.get(slug=review_name_slug)
+	current_review = Review.objects.get(user=request.user, slug=review_name_slug)
 	context={'alert_message':None}
 	if request.method == 'POST':
 		if request.POST.get('relevant', "") != "":
-			paper=Paper.objects.filter(paper_url=request.POST.get('relevant')).first()
+			paper=Paper.objects.filter(user=request.user, paper_url=request.POST.get('relevant')).first()
 			if paper!=None:
 				paper.document_relevance="True"
 				paper.save()
 				context['alert_message']="Paper "+paper.title+" was marked as relevant."
 		elif request.POST.get('not_relevant', default="")!="":
-			paper=Paper.objects.filter(paper_url=request.POST.get('not_relevant', "")).first()
+			paper=Paper.objects.filter(user=request.user, paper_url=request.POST.get('not_relevant', "")).first()
 			if paper!=None:
 				paper.delete()
 				context['alert_message']="Paper "+paper.title+" was marked as not relevant."
-	documents = Paper.objects.filter(review=current_review, document_relevance="False")
+	documents = Paper.objects.filter(user=request.user, review=current_review, document_relevance="False")
 	context={'documents':documents, 'review_slug':review_name_slug}
 	return render(request, 'ultimatereview/document_pool.html', context)
-	
-    
+
+
 @login_required
 def user_logout(request):
     logout(request)
