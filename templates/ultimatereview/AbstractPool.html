@@ -22,12 +22,6 @@
   <div class = 'AbstractSpace'>
     <h2>Document Abstract </h2>
     <p id = 'AbstractSpace' name = 'CurrentAbstract'></p>
-    <form method = "POST" name="Relevancy">
-          {% csrf_token %}
-          <button type="submit" value=None name="relevant" action="/ultimatereview/singlereview/{{review.slug}}/AbstractPool">Relevant</button>
-          <button type="submit" value=None name="irrelevant">Not Relevant</button>
-          <input name = "queryField" value = "{{ query }}" style="display:none;" />
-       </form>
   </div>
 
 
@@ -48,6 +42,14 @@
 						</p>
                <hr>
                <button value="{{ Abstract.abstract }}" id = "AbstractButton">Retrieve Abstract</button>
+
+							 <form method = "POST" name="Relevancy">
+					           {% csrf_token %}
+					           <button type="submit" value=None name="relevant_button" action="/ultimatereview/singlereview/{{review.slug}}/AbstractPool">Relevant</button>
+					           <button type="submit" value=None name="irrelevant_button">Not Relevant</button>
+					           <input name = "queryField" value = "{{ query }}" style="display:none;" />
+					     </form>
+
           </td>
 
       	</tr>
