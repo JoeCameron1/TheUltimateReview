@@ -65,10 +65,9 @@ def user_login(request):
                 login(request, user)
                 return HttpResponseRedirect('/ultimatereview/')
             else:
-                return HttpResponse("Your Ultimate Review account is disabled.")
+                return render(request, 'ultimatereview/login.html',{'alert_message':"Your Ultimate Review account is disabled."})
         else:
-            print "Invalid login details: {0}, {1}".format(username, password)
-            return HttpResponse("Invalid login details supplied.")
+            return render(request, 'ultimatereview/login.html', {'alert_message':"Invalid login details."})
     else:
         return render(request, 'ultimatereview/login.html', {})
 
