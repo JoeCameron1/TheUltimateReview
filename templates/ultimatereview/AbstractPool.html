@@ -30,8 +30,9 @@
        </form>
   </div>
 
-    {% for Abstract in Abstracts %}
+	<div>
 
+    {% for Abstract in Abstracts %}
       <table style="width:20%"  id = "abstract" class = "SelectionTable">
         <tr>
            <td> <h2>Document Title</h2>
@@ -41,12 +42,13 @@
               <p>> {{ Abstract.author }} </p>
                <hr>
                <button value="{{ Abstract.abstract }}" id = "AbstractButton">Retrieve Abstract</button>
-            </td>
+          </td>
 
-        </tr>
+      	</tr>
       </table>
-
     {% endfor %}
+
+	</div>
 
 
 
