@@ -43,7 +43,7 @@ class Paper(models.Model):
     abstract_relevance = models.CharField(max_length=30)
     document_relevance = models.CharField(max_length=30)
     notes = models.CharField(max_length=30)
-    
+
     def __unicode__(self):  #For Python 2, use __str__ on Python 3
         return self.title or ''
 
