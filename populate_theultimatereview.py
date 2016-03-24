@@ -1,5 +1,5 @@
 import os
-os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'tango_with_django_project.settings')
+os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'ultimate_review.settings')
 
 import django
 django.setup()
@@ -9,6 +9,15 @@ from ultimatereview.models import Review, Researcher, Query, Paper
 
 def populate():
 
-    example_user1 = ('jill')
+    User.objects.create_user(username='jill', email='jill@email.com', password='jill')
 
-    add_user()
+    User.objects.create_user(username='jim', email='jim@email.com', password='jim')
+
+    User.objects.create_user(username='joe', email='joe@email.com', password='joe')
+
+    for u in User.objects.all():
+        print "{0}".format(str(u))
+
+if __name__ == '__main__':
+    print "Starting The Ultimate Review population script..."
+    populate()
