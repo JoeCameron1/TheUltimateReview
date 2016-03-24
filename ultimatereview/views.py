@@ -168,22 +168,26 @@ def AbstractPool(request, review_name_slug):
             n = request.POST.get('noResults')
             abstractList = search.main(q,s, n)
         else:
-            print "traceB"
             abstractList = eval(request.POST.get('results'))
             q = request.POST.get('queryField')
-        relevant=None
-        if request.POST.get("relevant_button", None)!=None:
-            relevant="True"
+        relevant="Unchecked"
+        if request.POST.get("relevanceField") == "relevant":
+            relevant="Relevant"
         else:
-            if request.POST.get("irrelevant_button" ,None)!=None:
-                relevant="False"
-        if relevant!=None:
+            if request.POST.get("relevanceField") == "irrelevant":
+                relevant="Not Relevant"
+        if relevant!="Unchecked":
+            print "traceA"
             compareCount_value = int(request.POST.get("hiddenCompareCount"))
             for s in abstractList:
                 if s.get('compareCount') == compareCount_value:
                         currentDoc = s
                         paper = Paper(review=review, title=currentDoc["title"], paper_url=currentDoc["url"], abstract=currentDoc["abstract"], authors=currentDoc["author"], abstract_relevance=relevant)
                         paper.save()
+            print "--------------------------------"
+            print "REMOVING " + str(compareCount_value-1)
+            print "--------------------------------"
+            del abstractList[compareCount_value-1]
 
         return render(request, 'ultimatereview/AbstractPool.html', {"Abstracts": abstractList, 'query': q})
 
