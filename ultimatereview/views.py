@@ -180,7 +180,12 @@ def AbstractPool(request, review_name_slug):
             print "--------------------------------"
             print "REMOVING " + str(compareCount_value-1)
             print "--------------------------------"
-            del abstractList[compareCount_value-1]
+            print abstractList
+            print "--------------------------------"
+            if len(abstractList)>1:
+                del abstractList[compareCount_value-1]
+            else:
+                del abstractList[compareCount_value]
 
         return render(request, 'ultimatereview/AbstractPool.html', {"Abstracts": abstractList, 'query': q})
 

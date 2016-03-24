@@ -41,7 +41,7 @@ class Paper(models.Model):
     paper_url = models.URLField()
     full_text = models.URLField(null=True)
     abstract_relevance = models.CharField(max_length=30)
-    document_relevance = models.CharField(max_length=30)
+    document_relevance = models.CharField(max_length=10, default = "False")
     notes = models.CharField(max_length=30)
 
     def __unicode__(self):  #For Python 2, use __str__ on Python 3
