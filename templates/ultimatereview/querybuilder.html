@@ -30,10 +30,23 @@
 	{% if alert_message %}
 	{{ alert_message }}
 	{% endif %}
-
+<!-- the user is only allowed to the pool for the stage he is currently at -->
+	{% if review.pool == 0 %}
+	Search for a query and start your review.
+	{% elif review.pool == 1 %}
+	<!-- link to the abstract pool -->
+	<a href="/ultimatereview/singlereview/{{ review.slug }}/AbstractPool/"><button>Abstract Pool</button></a>
+	{% elif review.pool == 2 %}
+	<!-- link to the document pool -->
 	<a href="/ultimatereview/singlereview/{{ review.slug }}/DocumentPool/"><button>Document Pool</button></a>
-
-	<form method="POST" action = "AbstractPool/">
+    {% elif review.pool == 3 %}
+	<!-- link to the final pool -->
+	<a href="/ultimatereview/singlereview/{{ review.slug }}/FinalPool/"><button>Final Pool</button></a>
+	{% else %}
+	This review has not been set to a valid pool stage.<br/>
+	Contact administrator.
+	{% endif %}
+	<form method="POST" action = "/ultimatereview/query_results/">
         <div class = "margins">
   		{% csrf_token %}
   		<textarea cols = "200" rows = "4" id = "queryID" type = "text" name = "queryField"></textarea>
@@ -44,6 +57,8 @@
             <option value = "recent">Most Recent</option>
             <option value = "title">Title</option>
         </select>
+		<!-- the input below submits the review slug, so that query_results know where these results belong -->
+		<input name='review_slug' style="display:none", value="{{ review.slug }}"/>
         </div>
 	</form>
 	<form id = "saveButton" name = "queries" method="POST" action="/ultimatereview/singlereview/{{ review.slug }}/">
@@ -79,30 +94,32 @@
             </tr>
         {% endif %}
 </div>
-
+<!-- I have added a separate final pool page
 <div>
     <table border="3" style="width:98%">
         <tr  class="header">
             <td colspan="2">Document Title</td>
         </tr>
-        {% if pages %}
-        {% for page in finalpages %}
+        {% if paper %}
+        {% for p in paper %}
+            {% if p.document_relevance == "True" %}
         <tr>
             <td>
-            <p>{{ page.title }}<p>
+            <p>{{ p.title }}</p>
             <td>
 		    <td>
-            <a href = {{ page.full }}>Full Text</a>
+            <a href = {{ p.full_text }}>Full Text</a>
             </td>
 		</td>
         </tr>
+            {% endif %}
         {% endfor %}
             {% else %}
             <tr>
                 <td>You have no documents</td>
             </tr>
         {% endif %}
-</div>
+</div> -->
 
 </html>
 

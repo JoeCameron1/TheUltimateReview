@@ -77,7 +77,7 @@ def myreviews(request):
 		if new_title!="":
 			if not any(c in '!@#$%^&*\"\'' for c in new_title):
 				if not reviews.filter(slug=slugify(new_title)).exists():
-					review = Review(user=request.user, title=new_title, date_started=datetime.datetime.now())
+					review = Review(user=request.user, title=new_title, date_started=datetime.datetime.now(), pool=0)
 					review.save()
 					reviews = Review.objects.filter(user=request.user).order_by('-date_started')
 					context['reviews']=reviews
@@ -123,8 +123,10 @@ def single_review(request, review_name_slug):
         review = Review.objects.get(user=request.user, slug=review_name_slug)
         context['review_title'] = review.title
         queries = Query.objects.filter(review=review)
+        paper = Paper.objects.filter(review=review)
         context['queries'] = queries
         context['review'] = review
+        context['paper'] = paper
         if request.method == "POST":
             if request.POST.get('delete_query', "") != "":
                 query_to_delete = Query.objects.get(name=request.POST.get('delete_query'))
@@ -141,6 +143,7 @@ def single_review(request, review_name_slug):
                 context['review'] = review
                 context['alert_message'] = "Query saved: " + request.POST.get('queryField')
     except Review.DoesNotExist:
+
         pass
     return render(request, 'ultimatereview/querybuilder.html', context)
 
@@ -151,43 +154,68 @@ def relevant_doc(request):
         docID = request.GET['test']
     return(HttpResponse)
 
+def query_results(request):
+	review_slug=request.POST.get('review_slug', default=None)
+	if request.method == "POST" and review_slug != None:
+		q = request.POST.get('queryField')
+		s = request.POST.get('sortType')
+		n = request.POST.get('noResults')
+		abstractList = search.main(q,s, n)
+	review=Review.objects.get(user=request.user, slug=review_slug)
+	return render(request, 'ultimatereview/query_results.html', {'Abstracts':abstractList, 'query':q, 'review':review, 's':s, 'n':n})
+	
 @login_required
 def AbstractPool(request, review_name_slug):
-    review = Review.objects.get(user=request.user, slug=review_name_slug)
-    if request.method == "POST":
-        if request.POST.get('results') == None:
-            q = request.POST.get('queryField')
-            s = request.POST.get('sortType')
-            n = request.POST.get('noResults')
-            abstractList = search.main(q,s, n)
-        else:
-            abstractList = eval(request.POST.get('results'))
-            q = request.POST.get('queryField')
-        relevant="Unchecked"
-        if request.POST.get("relevanceField") == "relevant":
-            relevant="Relevant"
-        else:
-            if request.POST.get("relevanceField") == "irrelevant":
-                relevant="Not Relevant"
-        if relevant!="Unchecked":
-            print "traceA"
-            compareCount_value = int(request.POST.get("hiddenCompareCount"))
-            for s in abstractList:
-                if s.get('compareCount') == compareCount_value:
-                        currentDoc = s
-                        paper = Paper(review=review, title=currentDoc["title"], paper_url=currentDoc["url"], abstract=currentDoc["abstract"], authors=currentDoc["author"], abstract_relevance=relevant)
-                        paper.save()
-            print "--------------------------------"
-            print "REMOVING " + str(compareCount_value-1)
-            print "--------------------------------"
-            print abstractList
-            print "--------------------------------"
-            if len(abstractList)>1:
-                del abstractList[compareCount_value-1]
-            else:
-                del abstractList[compareCount_value]
-
-        return render(request, 'ultimatereview/AbstractPool.html', {"Abstracts": abstractList, 'query': q})
+	current_review = Review.objects.get(user=request.user, slug=review_name_slug)
+	if request.method == "POST":		
+		#the if below checks if the 'query' field has been sent
+		#if it has, then this is a request from query_results to save all
+		#however passing the abstracts from the template was problematic, because
+		#the entire dictionary was turned into unicode
+		#so I pass the search parameters, search again and save the results
+		query=request.POST.get('query', default="")
+		if query!="":
+			q = request.POST.get('query')
+			s = request.POST.get('s')
+			n = request.POST.get('n')
+			abstractList = search.main(q, s, n)
+			for abstract in abstractList:
+				#this turns the list of authors into a single string, separated by;
+				authors_list=""
+				for author in abstract.get('author'):
+					authors_list=authors_list+author+";"
+				paper=Paper(review=current_review, title=abstract.get("title"), paper_url=abstract.get("url"), full_text=abstract.get('fullText'), abstract=abstract.get("abstract"), authors=authors_list)
+				paper.save()
+			#updating the review as well
+			current_review.query_string=query
+			current_review.pool=1
+			current_review.save()
+		#else check if this is a request from the abstract pool for an abstract having been rated
+		elif request.POST.get("relevanceField") == "relevant":
+			#relevant abstracts have their abstract_relevance set to "True" (string)
+			current_paper=Paper.objects.get(id=request.POST.get("hiddenCompareCount"))
+			current_paper.abstract_relevance="True"
+			current_paper.save()
+			#updating the number of abstracts judged
+			current_review.abstracts_judged=current_review.abstracts_judged+1
+			current_review.save()
+		elif request.POST.get("relevanceField") == "irrelevant":
+			#id is unique among all Paper objects in the database (the database taked care of this) so it is a fast and proper identifier
+			Paper.objects.get(id=request.POST.get("hiddenCompareCount")).delete()#irrelevant abstracts are deleted from the database
+			current_review.abstracts_judged=current_review.abstracts_judged+1
+			current_review.save()
+	abstractList=Paper.objects.filter(review=current_review, abstract_relevance="False")
+	if abstractList.count()==0:
+		#if the abstract pool is empty, then the user must move on to the document pool
+		current_review.pool=2
+		current_review.save()
+		documents = Paper.objects.filter(review=current_review, document_relevance="False")
+		context={'documents':documents, 'review_slug':review_name_slug}
+		return render(request, 'ultimatereview/document_pool.html', context)
+	submitList=[]
+	for abstract in abstractList:
+		submitList.append({'paper':abstract, 'authors':abstract.authors.split(';')})
+	return render(request, 'ultimatereview/AbstractPool.html', {"Abstracts": submitList, 'result_count':abstractList.count()})
 
 @login_required
 def document_pool(request, review_name_slug):
@@ -199,17 +227,36 @@ def document_pool(request, review_name_slug):
 			if paper!=None:
 				paper.document_relevance="True"
 				paper.save()
+				#updating the number of documents judged
+				current_review.documents_judged=current_review.documents_judged+1
+				current_review.save()
 				context['alert_message']="Paper "+paper.title+" was marked as relevant."
 		elif request.POST.get('not_relevant', default="")!="":
 			paper=Paper.objects.filter(paper_url=request.POST.get('not_relevant', "")).first()
 			if paper!=None:
 				paper.delete()
+				current_review.documents_judged=current_review.documents_judged+1
+				current_review.save()
 				context['alert_message']="Paper "+paper.title+" was marked as not relevant."
 	documents = Paper.objects.filter(review=current_review, document_relevance="False")
+	if documents.count()==0:
+	#if there are no more unrated papers, then the user moves on to the final pool
+		current_review.pool=3
+		current_review.save()
+		documents = Paper.objects.filter(review=current_review)
+		context={'documents':documents}
+		return render(request, 'ultimatereview/final_pool.html', context)
 	context={'documents':documents, 'review_slug':review_name_slug}
 	return render(request, 'ultimatereview/document_pool.html', context)
 
-
+@login_required
+def final_pool(request, review_name_slug):
+#displays the final pool
+	current_review = Review.objects.get(user=request.user, slug=review_name_slug)
+	documents = Paper.objects.filter(review=current_review)
+	context={'documents':documents}
+	return render(request, 'ultimatereview/final_pool.html', context)
+	
 @login_required
 def user_logout(request):
     logout(request)

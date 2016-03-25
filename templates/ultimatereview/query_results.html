@@ -1,0 +1,66 @@
+{% extends 'ultimatereview/base.html' %}
+
+{% load staticfiles %}
+
+{% block title %}{{ review_name }}{% endblock %}
+
+{% block body_block %}
+<!-- the purpose of this template is to display the results from a query without giving the options to rate the abstracts. 
+If the user has not started an abstract pool for this review it also gives him the possibility to start his abstract pool by saving these results.  -->
+<html>
+<head>
+	<link rel="stylesheet" href = "{% static 'css/abstract_pool.css' %}">
+	<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.mins.js"></script>
+	<script src="{% static "js/AbstractPool.js" %}"></script>
+</head>
+
+<div class="content" >
+
+        <h2>Query Results</h2>
+	    <!-- sending this form saves Abstracts to the database.
+        There is only one abstract pool, so the user can start the review once 
+	    Sending the form sets the review's pool field to 1 -->
+	    {% if review.pool == 0 %}
+	    <form method="POST" action="/ultimatereview/singlereview/{{ review.slug }}/AbstractPool/"/>
+            {% csrf_token %}
+			<input type="submit" value="Start abstract evaluation" />
+			<!-- these are passed so the search can be replicated, because sendng the dictionary was problematic-turned into unicode -->
+			<input style="display:none" name="query" value="{{ query }}" />
+			<input style="display:none" name="s" value="{{ s }}" />
+			<input style="display:none" name="n" value="{{ n }}" />
+        </form>
+		{% endif %}
+        <ul id="documentAbstract"></ul>
+
+        <div  class = 'AbstractSpace'>
+            <h2>Document Abstract </h2>
+            <p id = 'AbstractSpace' name = 'CurrentAbstract'></p>
+        </div>
+
+      {% for abstract in Abstracts %}
+
+        <table style="width:20%"  id = "abstract" class = "SelectionTable">
+          <tr>
+             <td>
+               <h2 class = "centre">Document Title</h2>
+               <p>{{ abstract.title }}</p>
+
+               <h2 class = "centre"><strong>Document Author(s)<strong/></strong></h2>
+               <p class = "centre">
+                 {% for author in abstract.author %}
+                 {{ author }}
+                 <br />
+                 {% endfor %}
+               </p>
+               <hr>
+               <button value="{{ abstract.abstract }}" id = "AbstractButton">Retrieve Abstract</button>
+            </td>
+          </tr>
+        </table>
+
+      {% endfor %}
+      <hr />
+</div>
+</html>
+
+{% endblock %}
