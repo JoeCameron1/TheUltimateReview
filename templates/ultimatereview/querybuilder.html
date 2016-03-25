@@ -33,6 +33,12 @@
 
 	<a href="/ultimatereview/singlereview/{{ review.slug }}/DocumentPool/"><button>Document Pool</button></a>
 
+    {% if abstracts %}
+        <form method = "POST" action="/ultimatereview/singlereview/{{ review.slug }}/">
+            <input name = "results" value = "{{ abstracts }}" style = display:none;/>
+        </form>
+        {% endif %}
+
 	<form method="POST" action = "AbstractPool/">
         <div class = "margins">
   		{% csrf_token %}
@@ -104,8 +110,9 @@
                 <td>You have no documents</td>
             </tr>
         {% endif %}
-</div>
 
+</div>
+<div>  </div>
 </html>
 
 {% endblock %}

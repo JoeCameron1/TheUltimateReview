@@ -14,7 +14,9 @@
     {{ alert_message }}
     {% endif %}
 </div>
-
+<div>
+    <a href = "/ultimatereview/singlereview/{{ review }}"><button>Back</button></a>
+</div>
 <div>
     <table border="3" style="width:100%">
     <h2><thead>
@@ -28,7 +30,7 @@
         <tr>
             <td>{{ document.title }}</td>
             <td>
-			{% if document.full_text %}
+			{% if document.full_text != "No Full Text Available" %}
 			<a target="_blank" href="{{ document.full_text }}" ><button>Link</button></a>
 			{% else %}
 			Not available

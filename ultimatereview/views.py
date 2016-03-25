@@ -128,6 +128,8 @@ def single_review(request, review_name_slug):
         context['review'] = review
         context['paper'] = paper
         if request.method == "POST":
+            if request.POST.get('abstractReturn', "") != "":
+                context['abstracts'] = request.POST.get('abstractReturn')
             if request.POST.get('delete_query', "") != "":
                 query_to_delete = Query.objects.get(name=request.POST.get('delete_query'))
                 if query_to_delete != None:
@@ -163,6 +165,10 @@ def AbstractPool(request, review_name_slug):
             s = request.POST.get('sortType')
             n = request.POST.get('noResults')
             abstractList = search.main(q,s, n)
+            for document in abstractList:
+                documentURL = document.get("url")
+                if Paper.objects.filter(paper_url= documentURL, review= review).exists():
+                    abstractList.remove(document)
         else:
             abstractList = eval(request.POST.get('results'))
             q = request.POST.get('queryField')
@@ -180,27 +186,23 @@ def AbstractPool(request, review_name_slug):
                         currentDoc = s
                         paper = Paper(review=review, title=currentDoc["title"], paper_url=currentDoc["url"], full_text=currentDoc['fullText'], abstract=currentDoc["abstract"], authors=currentDoc["author"], abstract_relevance=relevant)
                         paper.save()
-            print "--------------------------------"
-            print "REMOVING " + str(compareCount_value-1)
-            print "--------------------------------"
-            print abstractList
-            print "--------------------------------"
             if len(abstractList)>1:
                 for abstract in abstractList:
                     if int(abstract.get('compareCount')) > compareCount_value-1:
                         abstract['compareCount'] -= 1
                 del abstractList[compareCount_value-1]
             else:
-                for abstract in abstractList:
-                     if int(abstract.get('compareCount')) > compareCount_value:
-                            abstract['compareCount'] -= 1
-                del abstractList[compareCount_value]
-        return render(request, 'ultimatereview/AbstractPool.html', {"Abstracts": abstractList, 'query': q})
+                abstractList = []
+                #for abstract in abstractList:
+                     #if int(abstract.get('compareCount')) > compareCount_value:
+                            #abstract['compareCount'] -= 1
+                #del abstractList[compareCount_value]
+        return render(request, 'ultimatereview/AbstractPool.html', {"Abstracts": abstractList, 'query': q, 'review':review.title})
 
 @login_required
 def document_pool(request, review_name_slug):
 	current_review = Review.objects.get(user=request.user, slug=review_name_slug)
-	context={'alert_message':None}
+	context={'alert_message':None, 'review': current_review.title}
 	if request.method == 'POST':
 		if request.POST.get('relevant', "") != "":
 			paper=Paper.objects.filter(paper_url=request.POST.get('relevant')).first()
