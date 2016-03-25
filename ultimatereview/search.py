@@ -120,15 +120,13 @@ def main(query,sort,number):
                 return [{'url':"N/A",'abstract': "N/A", 'id': "N/A", 'fullText': "N/A",
                         'author': "N/A", 'title': "N/A"}]
         docList = []
-        compareCount = 1
         for u in idList:                #generates a new list containing each ID's respective url
                 document = {}
                 currentURL = fetchURL(u)
                 p = urllib.urlopen(url + currentURL)
                 source = p.read()
                 document = {'url': puburl + u, 'abstract': compactAbstract(source),
-                            'id':u, 'fullText':findFullText(puburl + u),'count':count, "compareCount":compareCount}
-                compareCount = compareCount + 1
+                            'id':u, 'fullText':findFullText(puburl + u),'count':count}
                 p.close
                 p = urllib.urlopen(url + summaryURL(u))
                 source = p.read()

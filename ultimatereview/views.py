@@ -171,10 +171,14 @@ def AbstractPool(request, review_name_slug):
             s = request.POST.get('sortType')
             n = request.POST.get('noResults')
             abstractList = search.main(q,s, n)
+            compareCount = 0
             for document in abstractList:
                 documentURL = document.get("url")
                 if Paper.objects.filter(paper_url= documentURL, review= review).exists():
                     abstractList.remove(document)
+            for document in abstractList:
+                document["compareCount"] = compareCount
+                compareCount +=1
         else:
             abstractList = eval(request.POST.get('results'))
             q = request.POST.get('queryField')
