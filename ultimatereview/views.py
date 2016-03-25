@@ -101,19 +101,23 @@ def edit_review(request, review_name_slug):
 	context={'title':review.title, 'slug':review.slug, 'alert_message':None}
 	if request.method == 'POST':
 		if review!=None:
-			if not any(c in '!@#$%^&*\"\'' for c in request.POST.get('review', "")):
-				if not Review.objects.filter(slug=slugify(request.POST.get('review', ""))).exists():
-					review.title = request.POST.get('review', "")
-					review.save()
-					reviews = Review.objects.filter(user=request.user).order_by('-date_started')
-					context = {'reviews':reviews, 'alert_message':"Review successfully renamed"}
-					return render(request, 'ultimatereview/myreviews.html', context)
+		#the verification of the title is the same as when crating a review
+			new_title=request.POST.get('review', "")
+			new_title = new_title.strip()
+			if new_title!="":
+				if not any(c in '!@#$%^&*\"\'' for c in new_title):
+					if not Review.objects.filter(slug=slugify(new_title)).exists():
+						review.title = request.POST.get('review', "")
+						review.save()
+						reviews = Review.objects.filter(user=request.user).order_by('-date_started')
+						context = {'reviews':reviews, 'alert_message':"Review successfully renamed"}
+						return render(request, 'ultimatereview/myreviews.html', context)
+					else:
+						context['alert_message']="A review with this name already exists."
 				else:
-					context['alert_message']="A review with this name already exists."
+					context['alert_message']="Title cannot contain !@#$%^&*\"\'"
 			else:
-				context['alert_message']="Title cannot contain !@#$%^&*\"\'"
-		else:
-			context['alert_message'] = "You must give your review a title."
+				context['alert_message'] = "You must give your review a title."
 	return render(request, 'ultimatereview/editreview.html', context)
 
 @login_required
@@ -128,24 +132,26 @@ def single_review(request, review_name_slug):
         context['review'] = review
         context['paper'] = paper
         if request.method == "POST":
-            if request.POST.get('abstractReturn', "") != "":
-                context['abstracts'] = request.POST.get('abstractReturn')
             if request.POST.get('delete_query', "") != "":
                 query_to_delete = Query.objects.get(name=request.POST.get('delete_query'))
                 if query_to_delete != None:
                     query_to_delete.delete()
                     context['alert_message'] = "Query deleted: " + query_to_delete.name
-            elif not queries.filter(name = request.POST.get('queryField')).exists():
-                query = Query.objects.create(review=review, name=request.POST.get('queryField'))
-                if query != None:
-                    query.save()
-                review = Review.objects.get(user=request.user, slug=review_name_slug)
-                queries = Query.objects.filter(review=review)
-                context['queries'] = queries
-                context['review'] = review
-                context['alert_message'] = "Query saved: " + request.POST.get('queryField')
-    except Review.DoesNotExist:
+            else:
+			#making sure an empty query will not be saved, removing spaces on both sides of the name
+				new_query=request.POST.get('queryField', default="")
+				new_query=new_query.strip()
+				if new_query!="" and not queries.filter(name = new_query).exists():
+					query = Query(review=review, name=new_query)
+					query.save()
+					context['alert_message'] = "Query saved: " + request.POST.get('queryField')
+				else:
+					context['alert_message']="You are either saving an empty query or a query with this name alreday exists."
+				queries = Query.objects.filter(review=review)
+				context['queries'] = queries
+				context['review'] = review
 
+    except Review.DoesNotExist:
         pass
     return render(request, 'ultimatereview/querybuilder.html', context)
 
