@@ -20,12 +20,6 @@
         {% endwith %}</h2></div>
       <ul id="documentAbstract"></ul>
 
-	<form method="POST" action="/ultimatereview/singlereview/{{ review.title }}/">
-  		{% csrf_token %}
-        <button name = "abstractReturn" value = {{ Abstracts }}>Back</button>
-	</form>
-<!---<a style ="margin-left: 65%" href="/ultimatereview/singlereview/{{ review.title }}/DocumentPool/"><button>Evaluate Relevant Documents</button></a>
---->
     <div  class = 'AbstractSpace'>
         <h2>Document Abstract </h2>
         <p id = 'AbstractSpace' name = 'CurrentAbstract'></p>

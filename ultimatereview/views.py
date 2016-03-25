@@ -197,7 +197,7 @@ def AbstractPool(request, review_name_slug):
                      #if int(abstract.get('compareCount')) > compareCount_value:
                             #abstract['compareCount'] -= 1
                 #del abstractList[compareCount_value]
-        return render(request, 'ultimatereview/AbstractPool.html', {"Abstracts": abstractList, 'query': q, 'review':review.title})
+        return render(request, 'ultimatereview/AbstractPool.html', {"Abstracts": abstractList, 'query': q, 'review':review.title,'slug': review_name_slug})
 
 @login_required
 def document_pool(request, review_name_slug):
