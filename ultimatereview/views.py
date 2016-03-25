@@ -221,7 +221,7 @@ def document_pool(request, review_name_slug):
 			if paper!=None:
 				paper.delete()
 				context['alert_message']="Paper "+paper.title+" was marked as not relevant."
-	documents = Paper.objects.filter(review=current_review, document_relevance="False")
+	documents = Paper.objects.filter(review=current_review, document_relevance="False", abstract_relevance="Relevant")
 	context={'documents':documents, 'review_slug':review_name_slug}
 	return render(request, 'ultimatereview/document_pool.html', context)
 
