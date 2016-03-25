@@ -13,11 +13,14 @@ class Review(models.Model):
     user = models.ForeignKey(User)
     title = models.CharField(max_length=30, null=True)
     date_started = models.DateField()
-    query_string = models.CharField(max_length=30, default="")
+    query_string = models.CharField(max_length=700, default="")
     pool_size = models.IntegerField(default=0)
     abstracts_judged = models.IntegerField(default=0)
-    document_judged = models.IntegerField(default=0)
+    documents_judged = models.IntegerField(default=0)
     slug = models.SlugField()
+    pool = models.IntegerField(default=0)#this field holds the stage of the review: 
+    #0-query construction, 1-abstract pool, 2-document pool, 3-final pool
+	#the button shown in querybuilder.html shows a button to the appropriate pool
 
     def save(self, *args, **kwargs):
         self.slug = slugify(self.title)
@@ -36,12 +39,13 @@ class Query(models.Model):
 class Paper(models.Model):
     review = models.ForeignKey(Review)
     title = models.CharField(max_length=30)
-    authors = models.CharField(max_length=30)
+    authors = models.CharField(max_length=600)#authors as a single string, separated by ;
     abstract = models.CharField(max_length=300)
     paper_url = models.URLField()
     full_text = models.URLField(null=True)
-    abstract_relevance = models.CharField(max_length=30)
-    document_relevance = models.CharField(max_length=10, default = "False")
+    abstract_relevance = models.CharField(max_length=6, default="False")#the use of this field is: "False" has not been rated yet
+	#"True" has been rated as relevant and belongs to the document pool
+    document_relevance = models.CharField(max_length=6, default = "False")
     notes = models.CharField(max_length=30)
 
     def __unicode__(self):  #For Python 2, use __str__ on Python 3
