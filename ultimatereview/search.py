@@ -47,9 +47,7 @@ def main(query,sort,number):
                 p.close()
                 index = source.find("Full text at pub")
                 if index == -1:
-				#made a change here, if no full text available, return None, this is used in the document pool
-                        #return "No Full Text Available"
-						return None
+                        return "No Full Text Available"
                 else:
                         index = source.find('f="',index)
                         index +=3
@@ -128,11 +126,8 @@ def main(query,sort,number):
                 currentURL = fetchURL(u)
                 p = urllib.urlopen(url + currentURL)
                 source = p.read()
-				#removed compareCount, I am now usong the unique auto-assigned database id.
-				#it is available after all the abstracts have been saved to the database
-				#I take it that count is the total number of results
                 document = {'url': puburl + u, 'abstract': compactAbstract(source),
-                            'id':u, 'fullText':findFullText(puburl + u),'count':count}
+                            'id':u, 'fullText':findFullText(puburl + u),'count':count, "compareCount":compareCount}
                 compareCount = compareCount + 1
                 p.close
                 p = urllib.urlopen(url + summaryURL(u))
