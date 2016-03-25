@@ -42,6 +42,8 @@
 			    {% csrf_token %}
                 <button type="submit" name="not_relevant" value="{{ document.paper_url }}">Not Relevant</button>
             </form></td>
+            <a href="/ultimatereview/editreview/{{ review.slug }}"><button>Edit</button></a>
+            </td>
         </tr>
         {% endfor %}
         {% else %}
