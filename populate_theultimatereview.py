@@ -9,12 +9,15 @@ from ultimatereview.models import Review, Researcher, Query, Paper
 
 def populate():
 
-    User.objects.create_user(username='jill', email='jill@email.com', password='jill')
-
-    User.objects.create_user(username='jim', email='jim@email.com', password='jim')
-
-    User.objects.create_user(username='joe', email='joe@email.com', password='joe')
-
+    user1 = User.objects.create_user(username='jill', email='jill@email.com', password='jill')
+    user1.save()
+    user2 = User.objects.create_user(username='jim', email='jim@email.com', password='jim')
+    user2.save()
+    user3 = User.objects.create_user(username='joe', email='joe@email.com', password='joe')
+    user3.save()
+    user4 = User.objects.create_user(username='bob', email='bob@email.com', password='bob')
+    user4.save()
+    
     for u in User.objects.all():
         print "{0}".format(str(u))
 
