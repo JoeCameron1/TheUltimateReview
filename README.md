@@ -21,4 +21,7 @@ Note: An earlier GitLog can be found on the Repository 'SystematicReviewApplicat
 New repository was used for the 2nd version of The Ultimate Review.
 
 Now includes a customisable query-constructor, which can search for authors and books.
-Can also sort results by relevancy, date of publish and title. 
+Can also sort results by relevancy, date of publish and title.
+
+Population Script is called 'populate_theultimatereview.py'. It adds the users jill, jim, joe and bob.
+Their passwords are the same as their usernames. 
