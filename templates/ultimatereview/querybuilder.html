@@ -100,17 +100,19 @@
         <tr  class="header">
             <td colspan="2">Document Title</td>
         </tr>
-        {% if pages %}
-        {% for page in finalpages %}
+        {% if paper %}
+        {% for p in paper %}
+            {% if p.document_relevance == "True" %}
         <tr>
             <td>
-            <p>{{ page.title }}<p>
+            <p>{{ p.title }}</p>
             <td>
 		    <td>
-            <a href = {{ page.full }}>Full Text</a>
+            <a href = {{ p.full_text }}>Full Text</a>
             </td>
 		</td>
         </tr>
+            {% endif %}
         {% endfor %}
             {% else %}
             <tr>

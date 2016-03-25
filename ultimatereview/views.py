@@ -123,8 +123,10 @@ def single_review(request, review_name_slug):
         review = Review.objects.get(user=request.user, slug=review_name_slug)
         context['review_title'] = review.title
         queries = Query.objects.filter(review=review)
+        paper = Paper.objects.filter(review=review)
         context['queries'] = queries
         context['review'] = review
+        context['paper'] = paper
         if request.method == "POST":
             if request.POST.get('delete_query', "") != "":
                 query_to_delete = Query.objects.get(name=request.POST.get('delete_query'))
@@ -141,6 +143,7 @@ def single_review(request, review_name_slug):
                 context['review'] = review
                 context['alert_message'] = "Query saved: " + request.POST.get('queryField')
     except Review.DoesNotExist:
+
         pass
     return render(request, 'ultimatereview/querybuilder.html', context)
 
@@ -163,6 +166,7 @@ def query_results(request):
 	
 @login_required
 def AbstractPool(request, review_name_slug):
+<<<<<<< HEAD
 	current_review = Review.objects.get(user=request.user, slug=review_name_slug)
 	if request.method == "POST":
 		#the code below was moved to query results but I cannot tell what the else clause is for
@@ -223,6 +227,48 @@ def AbstractPool(request, review_name_slug):
 	for abstract in abstractList:
 		submitList.append({'paper':abstract, 'authors':abstract.authors.split(';')})
 	return render(request, 'ultimatereview/AbstractPool.html', {"Abstracts": submitList})
+=======
+    review = Review.objects.get(user=request.user, slug=review_name_slug)
+    if request.method == "POST":
+        if request.POST.get('results') == None:
+            q = request.POST.get('queryField')
+            s = request.POST.get('sortType')
+            n = request.POST.get('noResults')
+            abstractList = search.main(q,s, n)
+        else:
+            abstractList = eval(request.POST.get('results'))
+            q = request.POST.get('queryField')
+        relevant="Unchecked"
+        if request.POST.get("relevanceField") == "relevant":
+            relevant="Relevant"
+        else:
+            if request.POST.get("relevanceField") == "irrelevant":
+                relevant="Not Relevant"
+        if relevant!="Unchecked":
+            print "traceA"
+            compareCount_value = int(request.POST.get("hiddenCompareCount"))
+            for s in abstractList:
+                if s.get('compareCount') == compareCount_value:
+                        currentDoc = s
+                        paper = Paper(review=review, title=currentDoc["title"], paper_url=currentDoc["url"], full_text=currentDoc['fullText'], abstract=currentDoc["abstract"], authors=currentDoc["author"], abstract_relevance=relevant)
+                        paper.save()
+            print "--------------------------------"
+            print "REMOVING " + str(compareCount_value-1)
+            print "--------------------------------"
+            print abstractList
+            print "--------------------------------"
+            if len(abstractList)>1:
+                for abstract in abstractList:
+                    if int(abstract.get('compareCount')) > compareCount_value-1:
+                        abstract['compareCount'] -= 1
+                del abstractList[compareCount_value-1]
+            else:
+                for abstract in abstractList:
+                     if int(abstract.get('compareCount')) > compareCount_value:
+                            abstract['compareCount'] -= 1
+                del abstractList[compareCount_value]
+        return render(request, 'ultimatereview/AbstractPool.html', {"Abstracts": abstractList, 'query': q})
+>>>>>>> 50f8acc9a8ccf3a24c64830f3454fcbc1abb167d
 
 @login_required
 def document_pool(request, review_name_slug):
