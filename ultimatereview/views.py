@@ -123,8 +123,10 @@ def single_review(request, review_name_slug):
         review = Review.objects.get(user=request.user, slug=review_name_slug)
         context['review_title'] = review.title
         queries = Query.objects.filter(review=review)
+        paper = Paper.objects.filter(review=review)
         context['queries'] = queries
         context['review'] = review
+        context['paper'] = paper
         if request.method == "POST":
             if request.POST.get('delete_query', "") != "":
                 query_to_delete = Query.objects.get(name=request.POST.get('delete_query'))
@@ -141,6 +143,7 @@ def single_review(request, review_name_slug):
                 context['review'] = review
                 context['alert_message'] = "Query saved: " + request.POST.get('queryField')
     except Review.DoesNotExist:
+
         pass
     return render(request, 'ultimatereview/querybuilder.html', context)
 
@@ -175,7 +178,7 @@ def AbstractPool(request, review_name_slug):
             for s in abstractList:
                 if s.get('compareCount') == compareCount_value:
                         currentDoc = s
-                        paper = Paper(review=review, title=currentDoc["title"], paper_url=currentDoc["url"], abstract=currentDoc["abstract"], authors=currentDoc["author"], abstract_relevance=relevant)
+                        paper = Paper(review=review, title=currentDoc["title"], paper_url=currentDoc["url"], full_text=currentDoc['fullText'], abstract=currentDoc["abstract"], authors=currentDoc["author"], abstract_relevance=relevant)
                         paper.save()
             print "--------------------------------"
             print "REMOVING " + str(compareCount_value-1)
@@ -183,10 +186,15 @@ def AbstractPool(request, review_name_slug):
             print abstractList
             print "--------------------------------"
             if len(abstractList)>1:
+                for abstract in abstractList:
+                    if int(abstract.get('compareCount')) > compareCount_value-1:
+                        abstract['compareCount'] -= 1
                 del abstractList[compareCount_value-1]
             else:
+                for abstract in abstractList:
+                     if int(abstract.get('compareCount')) > compareCount_value:
+                            abstract['compareCount'] -= 1
                 del abstractList[compareCount_value]
-
         return render(request, 'ultimatereview/AbstractPool.html', {"Abstracts": abstractList, 'query': q})
 
 @login_required

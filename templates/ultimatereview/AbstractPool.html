@@ -15,7 +15,7 @@
 
 <div class="content">
 
-      <h2>Abstract Pool</h2>
+      <h2>Abstract Pool: {{ Abstracts.0.count  }} results found. Displaying: {{ noResults }}</h2>
       <ul id="documentAbstract"></ul>
 
       <div  class = 'AbstractSpace'>
@@ -24,10 +24,10 @@
       </div>
 
       {% for Abstract in Abstracts %}
-
         <table style="width:20%"  id = "abstract" class = "SelectionTable">
           <tr>
              <td>
+             <h2>{{ Abstract.compareCount }}</h2>
                <h2 class = "centre">Document Title</h2>
                <p>{{Abstract.title}}</p>
 
